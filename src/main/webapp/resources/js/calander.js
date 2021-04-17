@@ -66,10 +66,10 @@ var defaults = {
 	dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
 	dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
 	buttonText: {
-		prev: "<span class='fc-text-arrow'>‹</span>",
-		next: "<span class='fc-text-arrow'>›</span>",
-		prevYear: "<span class='fc-text-arrow'>«</span>",
-		nextYear: "<span class='fc-text-arrow'>»</span>",
+		prev: "<span class='fc-text-arrow'><=</span>",
+		next: "<span class='fc-text-arrow'>=></span>",
+		prevYear: "<span class='fc-text-arrow'><<=</span>",
+		nextYear: "<span class='fc-text-arrow'>=>></span>",
 		today: 'today',
 		month: 'month',
 		week: 'week',
@@ -86,7 +86,7 @@ var defaults = {
 	//selectable: false,
 	unselectAuto: true,
 	
-	dropAccept: '*',
+	dropAccept: '',
 	
 	handleWindowResize: true
 	
@@ -100,10 +100,10 @@ var rtlDefaults = {
 		right: 'title'
 	},
 	buttonText: {
-		prev: "<span class='fc-text-arrow'>›</span>",
-		next: "<span class='fc-text-arrow'>‹</span>",
-		prevYear: "<span class='fc-text-arrow'>»</span>",
-		nextYear: "<span class='fc-text-arrow'>«</span>"
+		prev: "<span class='fc-text-arrow'>=></span>",
+		next: "<span class='fc-text-arrow'><=</span>",
+		prevYear: "<span class='fc-text-arrow'>=>></span>",
+		nextYear: "<span class='fc-text-arrow'></span>"
 	},
 	buttonIcons: {
 		prev: 'circle-triangle-e',
@@ -120,8 +120,7 @@ var fcViews = fc.views = {};
 
 
 $.fn.fullCalendar = function(options) {
-
-
+	console.log(options);
 	// method calling
 	if (typeof options == 'string') {
 		var args = Array.prototype.slice.call(arguments, 1);
@@ -161,7 +160,7 @@ $.fn.fullCalendar = function(options) {
 		options
 	);
 	
-	
+
 	this.each(function(i, _element) {
 		var element = $(_element);
 		var calendar = new Calendar(element, options, eventSources);
@@ -186,6 +185,9 @@ function setDefaults(d) {
 
  
 function Calendar(element, options, eventSources) {
+//	console.log(element);
+//	console.log(options);
+//	console.log(eventSources);
 	var t = this;
 	
 	
@@ -246,10 +248,12 @@ function Calendar(element, options, eventSources) {
 	
 	
 	function render(inc) {
+		console.log('render');
 		if (!content) {
 			initialRender();
 		}
 		else if (elementVisible()) {
+			console.log('elementVisible');
 			// mainly for the public API
 			calcSize();
 			_renderView(inc);
@@ -258,6 +262,7 @@ function Calendar(element, options, eventSources) {
 	
 	
 	function initialRender() {
+		console.log('initialRender');
 		tm = options.theme ? 'ui' : 'fc';
 		element.addClass('fc');
 		if (options.isRTL) {
@@ -269,7 +274,6 @@ function Calendar(element, options, eventSources) {
 		if (options.theme) {
 			element.addClass('ui-widget');
 		}
-
 		content = $("<div class='fc-content' style='position:relative'/>")
 			.prependTo(element);
 
@@ -743,6 +747,7 @@ function Header(calendar, options) {
 
 
 	function render() {
+		console.log('render()');
 		tm = options.theme ? 'ui' : 'fc';
 		var sections = options.header;
 		if (sections) {
@@ -774,7 +779,7 @@ function Header(calendar, options) {
 				var prevButton;
 				$.each(this.split(','), function(j, buttonName) {
 					if (buttonName == 'title') {
-						e.append("<span class='fc-header-title'><h2> </h2></span>");
+						e.append("<span class='fc-header-title'><h2></h2></span>");
 						if (prevButton) {
 							prevButton.addClass(tm + '-corner-right');
 						}
@@ -2388,7 +2393,7 @@ function BasicView(element, calendar, viewName) {
 
 		html +=
 			"<div class='fc-day-content'>" +
-			"<div style='position:relative'> </div>" +
+			"<div style='position:relative'></div>" +
 			"</div>" +
 			"</div>" +
 			"</td>";
@@ -3061,6 +3066,7 @@ function AgendaView(element, calendar, viewName) {
 
 
 	function buildDayTableHeadHTML() {
+
 		var headerClass = tm + "-widget-header";
 		var date;
 		var html = '';
@@ -3088,14 +3094,14 @@ function AgendaView(element, calendar, viewName) {
 		else {
 			html += "<th class='fc-agenda-axis " + headerClass + "'> </th>";
 		}
-
-		for (col=0; col<colCnt; col++) {
+		
+		 for (col=0; col<colCnt; col++) {
 			date = cellToDate(0, col);
 			html +=
 				"<th class='fc-" + dayIDs[date.getDay()] + " fc-col" + col + ' ' + headerClass + "'>" +
 				htmlEscape(formatDate(date, colFormat)) +
 				"</th>";
-		}
+		} 
 
 		html +=
 			"<th class='fc-agenda-gutter " + headerClass + "'> </th>" +
@@ -3107,6 +3113,7 @@ function AgendaView(element, calendar, viewName) {
 
 
 	function buildDayTableBodyHTML() {
+	console.log('buildDayTableBodyHTML');
 		var headerClass = tm + "-widget-header"; // TODO: make these when updateOptions() called
 		var contentClass = tm + "-widget-content";
 		var date;
@@ -3150,7 +3157,7 @@ function AgendaView(element, calendar, viewName) {
 				"<td class='" + classNames.join(' ') + "'>" +
 				"<div>" +
 				"<div class='fc-day-content'>" +
-				"<div style='position:relative'> </div>" +
+				"<div style='position:relative'></div>" +
 				"</div>" +
 				"</div>" +
 				"</td>";
@@ -5646,8 +5653,6 @@ function DayEventRenderer() {
 
 	
 	function draggableDayEvent(event, eventElement) {
-		console.log(event);
-		console.log(eventElement);
 		
 		var hoverListener = getHoverListener();
 		var dayDelta;
