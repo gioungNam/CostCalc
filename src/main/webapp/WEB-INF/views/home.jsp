@@ -3,10 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="calendar.css" rel="stylesheet">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="calander.js"></script>
+<script src="calendar.js" charset="utf-8"></script>
 <script>
 
 	$(document).ready(function() {
